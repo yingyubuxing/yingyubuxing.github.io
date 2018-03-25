@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>这里是kk文件夹第二页！</title>
+</head>
+<body>
+<h2>欢迎！</h2>
+</body>
+</html>
