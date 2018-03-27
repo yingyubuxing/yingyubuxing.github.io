@@ -46,8 +46,8 @@
     <script type="text/javascript">
       function draw(data) {
           "use strict";
-          var margin = {top: 20, right: 50, bottom: 50, left: 130},
-          w = 1100 ,
+          var margin = {top: 20, right: 50, bottom: 50, left: 250},
+          w = 1300 ,
           h = 500 ;
           d3.select('body').append('h2').text('棒球手特征差异情况对比');
           d3.select('body').append('h3').text('下图是对1,157名棒球手的身高、体重、BMI指数以及用手习惯跟击球率和全垒（HR）得分的关联对比。')
@@ -87,15 +87,15 @@
           //添加文字
           var x_text=xaixs_call.append('text')
                 .attr('class','m_text')
-                .text('轴:'+'height')
-                .attr('x',w/2)
+                .text('height')
+                .attr('x',w/2+50)
                 .attr('y',40);
 
           var y_text = yaixs_call.append('text')
-                  .text('轴:'+'avg')
+                  .text('avg')
                   .attr('class','m_text')
-                  .attr('x',10)
-                  .attr('y',20);
+                  .attr('x',-18)
+                  .attr('y',13);
 
           //添加散点到svg中
           var color1={'R':'orange','L':'green','B':'red'}
@@ -122,8 +122,8 @@
             //唤出新更新的轴以及标签
             xaixs_call.transition().duration(600).call(xaxis);
             yaixs_call.transition().duration(600).call(yaxis);
-            x_text.transition().duration(600).text('轴:'+key_1);
-            y_text.transition().duration(600).text('轴:'+key_2);
+            x_text.transition().duration(600).text(key_1);
+            y_text.transition().duration(600).text(key_2);
 
           }
           //设计更新单元(散点)
