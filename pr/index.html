@@ -36,6 +36,10 @@
       shape-rendering: crispEdges;
       color:red;
       }
+      text.m_text{
+      font-family: sans-serif;
+      font-size: 120%;
+      fill: #660033;font-weight:bold;}
 
 
     </style>
@@ -82,21 +86,18 @@
 
           //添加文字
           var x_text=xaixs_call.append('text')
-                .attr('class','x_text')
-                .text('height')
+                .attr('class','m_text')
+                .text('轴:'+'height')
                 .attr('x',w/2)
-                .attr('y',30)
-                .attr('fill','blue');
+                .attr('y',40);
 
           var y_text = yaixs_call.append('text')
-                  .text('avg')
-                  .attr('class','y_text')
-                  .attr('x',-10)
-                  .attr('y',10)
-                  .attr('fill','blue');
+                  .text('轴:'+'avg')
+                  .attr('class','m_text')
+                  .attr('x',10)
+                  .attr('y',20);
 
           //添加散点到svg中
-          // var label={'':,'',''}
           var color1={'R':'orange','L':'green','B':'red'}
           var title=["name", "handedness", "HR", "avg", "height", "weight",'BMI']
           var circle_0=svg.selectAll('.circle').data(data).enter().append('g').attr('class','circle'); //定义初始散点
@@ -121,8 +122,8 @@
             //唤出新更新的轴以及标签
             xaixs_call.transition().duration(600).call(xaxis);
             yaixs_call.transition().duration(600).call(yaxis);
-            x_text.transition().duration(600).text(key_1);
-            y_text.transition().duration(600).text(key_2);
+            x_text.transition().duration(600).text('轴:'+key_1);
+            y_text.transition().duration(600).text('轴:'+key_2);
 
           }
           //设计更新单元(散点)
@@ -152,28 +153,35 @@
 
 
             var buttons1 = d3.select('body')
-                    .selectAll('.button')
+                    .selectAll('button')
                     .data(Catagory)
                     .enter()
-                    .append('div')
-                    .append("button")
-                    .attr("class", "button")
+                    .append('button')
+                    .attr('class','bt')
                     .text(function(d){return d["btn_text"];});   //按钮文字
 
               //d3.select('.bottons').select("div").style("background", "lightBlue")
 
               buttons1.on('click',function(d){
-              // d3.select('.buttons')
-              d3.select(this)         
+                  d3.selectAll('.bt')
+                  // .selectAll('button')
+                  .transition()
+                  .duration(600)
+                  .style("color", "black")
+                  .style("background", "transparent")// 默认值
+
+                  d3.select(this)         
                   .transition()
                   .duration(600)
                   .style("background", "lightBlue")    //
-                  .style("color", "white");
+                  .style("color", "red");
 
               update_all(d["content_1"],d["content_2"]);
             });
 
-            //添加标签的区间
+
+
+            //添加标签
             var legend=svg.append('g')
                 .attr('class','legend')
                 .attr('transform',"translate(" + (w-50)+","+20+")")
@@ -190,7 +198,7 @@
                   return 'orange';}
                   else if(d== '左手'){
                    return 'green';} else{return 'red'}});
-            //添加文字
+            //添加标签文字
             legend.append('text')
                 .attr('y',function(d,i){
                     return i*30 +5;
