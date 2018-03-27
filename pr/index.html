@@ -152,6 +152,34 @@
 
               update_all(d["content_1"],d["content_2"]);
             });
+
+            //添加标签的区间
+            var legend=svg.append('g')
+                .attr('class','legend')
+                .attr('transform',"translate(" + (w-50)+","+20+")")
+                .selectAll('g')
+                .data(['左手',"右手",'双手'])
+                .enter()
+                .append('g');
+
+            //添加标签的样式（圆形大小以及颜色）
+            legend.append('circle')
+                .attr('cy',function(d,i){return i*30;})
+                .attr('r',10)
+                .attr('fill',function(d){if (d== '右手'){
+                  return 'orange';}
+                  else if(d== '左手'){
+                   return 'green';} else{return 'red'}});
+            //添加文字
+            legend.append('text')
+                .attr('y',function(d,i){
+                    return i*30 +5;
+                })
+                .attr('x',4 * 5)
+                .text(function(d){
+                  return d;
+                });
+
         };
       </script>
   </head>
