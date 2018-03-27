@@ -1,1 +1,167 @@
-aa
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  
+  <style>
+    h2 {text-align: center;}
+      .axis path,
+      .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+      }
+      .axis text {
+      font-family: sans-serif;
+      font-size: 11px;
+      }
+      .axis x_text {
+      font-family: sans-serif;
+      font-size: 12px;}
+
+
+    </style>
+    <script type="text/javascript">
+      function draw(data) {
+          "use strict";
+          var margin = {top: 20, right: 50, bottom: 50, left: 130},
+          w = 1100 ,
+          h = 500 ;
+          d3.select('body').append('h2').text('图表');
+
+          var svg=d3.select('body')
+                    .append('svg')
+                    .attr('width',w)
+                    .attr('height',h)
+                    .append('g')
+                    .attr('class','desktop')
+
+          //定义比例尺
+          var x_extent=d3.extent(data,function(d){return d['height']});
+          var y_extent=d3.extent(data,function(d){return d['avg']});
+
+          var xscale = d3.scale.linear().domain(x_extent).range([margin.left,w-margin.right]);
+          var yscale = d3.scale.linear().domain(y_extent).range([h-margin.bottom,margin.top]);
+
+          //定义轴
+          var xaxis=d3.svg.axis().scale(xscale).orient('bottom');
+          var yaxis=d3.svg.axis().scale(yscale).orient('left');
+
+          //添加轴到svg中
+          var xaixs_call=svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," +(h-margin.bottom)+" )")
+                .call(xaxis);
+  
+          var yaixs_call=svg.append("g")
+                .attr("class", "y axis")
+                .attr("transform", "translate(" + margin.left +  ",0)")
+                .call(yaxis);
+
+          //添加文字
+          var x_text=xaixs_call.append('text')
+                .attr('class','x_text')
+                .text('height')
+                .attr('x',w/2)
+                .attr('y',30)
+                .attr('fill','blue');
+
+          var y_text = yaixs_call.append('text')
+                  .text('avg')
+                  .attr('class','y_text')
+                  .attr('x',-10)
+                  .attr('y',10)
+                  .attr('fill','blue');
+
+          //添加散点到svg中
+          // var label={'':,'',''}
+          var color1={'R':'orange','L':'green','B':'red'}
+          var title=["name", "handedness", "HR", "avg", "height", "weight",'BMI']
+          var circle_0=svg.selectAll('.circle').data(data).enter().append('g').attr('class','circle'); //定义初始散点
+          //给散点添加实体单元
+          var circle=circle_0.append('circle')
+                 .attr('cx',function(d){return xscale(d['height']);})
+                 .attr('cy',function(d){return yscale(d['avg']);})
+                 .attr('r',5)
+                 .attr('fill',function(d){return color1[d['handedness']]})
+                 .attr('stroke','black').attr('stroke-width', 0.5);
+          // svg.select('div').
+          //设计更新单元(轴)
+          function update_axis(key_1,key_2){
+            x_extent=d3.extent(data,function(d){return d[key_1]});
+            y_extent=d3.extent(data,function(d){return d[key_2]});
+
+            xscale = d3.scale.linear().domain(x_extent).range([margin.left,w-margin.right]);
+            yscale = d3.scale.linear().domain(y_extent).range([h-margin.bottom,margin.top]);
+            //定义轴
+            xaxis=d3.svg.axis().scale(xscale).orient('bottom');
+            yaxis=d3.svg.axis().scale(yscale).orient('left');
+            //唤出新更新的轴以及标签
+            xaixs_call.transition().duration(600).call(xaxis);
+            yaixs_call.transition().duration(600).call(yaxis);
+            x_text.transition().duration(600).text(key_1);
+            y_text.transition().duration(600).text(key_2);
+
+          }
+          //设计更新单元(散点)
+          function update_circle(key_1,key_2){
+            circle.transition().duration(600)
+            .attr('cx',function(d){return xscale(d[key_1])})
+            .attr('cy',function(d){return yscale(d[key_2])})
+            ;}
+
+          // function update_text(key_1,key_2){
+
+
+          // }
+
+          //合并更新项
+          function update_all(key_1,key_2){
+            update_circle(key_1,key_2);
+            update_axis(key_1,key_2);
+          }
+          //定义按钮
+          var Catagory = [{"btn_text":"身高-击球率","content_1":"height",'content_2':'avg'},
+                          {"btn_text":"体重-击球率","content_1":"weight",'content_2':'avg'},
+                          {"btn_text":"身高-HR","content_1":"height",'content_2':'HR'},
+                          {"btn_text":"体重-HR","content_1":"weight",'content_2':'HR'},
+                          {"btn_text":"BMI-击球率","content_1":"BMI",'content_2':'avg'},
+                          {"btn_text":"BMI-HR","content_1":"BMI",'content_2':'HR'}];
+
+
+            var buttons1 = d3.select('body')
+                    .selectAll('.button')
+                    .data(Catagory)
+                    .enter()
+                    .append('div')
+                    .append("button")
+                    .attr("class", "button")
+                    .text(function(d){return d["btn_text"];});   //按钮文字
+
+              //d3.select('.bottons').select("div").style("background", "lightBlue")
+
+              buttons1.on('click',function(d){
+              // d3.select('.buttons')
+              d3.select(this)         
+                  .transition()
+                  .duration(600)
+                  .style("background", "lightBlue")    //
+                  .style("color", "white");
+
+              update_all(d["content_1"],d["content_2"]);
+            });
+        };
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+
+  d3.csv("baseball_data.csv",function(d){d['HR']=+d['HR'],
+    d['avg']=+d['avg'],d['height']=+d['height'],d['weight']=+d['weight'],d['BMI']=+d['BMI']; return d },draw);
+  </script>
+</body>
+</html>
+
+
