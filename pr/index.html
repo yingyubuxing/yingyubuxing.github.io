@@ -17,10 +17,6 @@
       font-family: sans-serif;
       font-size: 11px;
       }
-      .axis x_text {
-      font-family: sans-serif;
-      font-size: 12px;}
-
     h3{text-align: center;}
       .axis path,
       .axis line {
@@ -28,7 +24,6 @@
       stroke: black;
       shape-rendering: crispEdges;
       }
-
 
     p.f1{text-align: center;
       fill: none;
@@ -42,6 +37,8 @@
       fill: #660033;font-weight:bold;}
 
 
+
+
     </style>
     <script type="text/javascript">
       function draw(data) {
@@ -53,7 +50,7 @@
           d3.select('body').append('h3').text('下图是对1,157名棒球手的身高、体重、BMI指数以及用手习惯跟击球率和全垒（HR）得分的关联对比。')
           d3.select('body').append('p').text('BMI=体重/身高的平方,肥胖的世界标准是，BMI在18．5至24．9时属正常范围，BMI大于25为超重，BMI大于30为肥胖').attr('class','f1')
 
-          d3.select('body').append('svg').attr('width',w).attr('height',100)
+          d3.select('body').append('svg').attr('width',w).attr('height',100).attr('id','block')
 
           var svg=d3.select('body')
                     .append('svg')
@@ -140,8 +137,9 @@
 
           //合并更新项
           function update_all(key_1,key_2){
-            update_circle(key_1,key_2);
             update_axis(key_1,key_2);
+            update_circle(key_1,key_2);
+            
           }
           //定义按钮
           var Catagory = [{"btn_text":"身高-击球率","content_1":"height",'content_2':'avg'},
