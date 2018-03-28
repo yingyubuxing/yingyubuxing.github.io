@@ -5,7 +5,7 @@
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
   
-  <style>
+  <style type="text/css">
     h2 {text-align: center;}
       .axis path,
       .axis line {
@@ -29,21 +29,21 @@
       fill: none;
       stroke: black;
       shape-rendering: crispEdges;
-      color:red;
+      color:black;
       }
       text.m_text{
       font-family: sans-serif;
       font-size: 120%;
       fill: #660033;font-weight:bold;}
 
-
+     
 
 
     </style>
     <script type="text/javascript">
       function draw(data) {
           "use strict";
-          var margin = {top: 20, right: 50, bottom: 50, left: 250},
+          var margin = {top: 20, right: 100, bottom: 50, left: 250},
           w = 1300 ,
           h = 500 ;
           d3.select('body').append('h2').text('棒球手特征差异情况对比');
@@ -182,11 +182,12 @@
             //添加标签
             var legend=svg.append('g')
                 .attr('class','legend')
-                .attr('transform',"translate(" + (w-50)+","+20+")")
+                .attr('transform',"translate(" + (w-50)+",10)")
                 .selectAll('g')
                 .data(['左手',"右手",'双手'])
                 .enter()
-                .append('g');
+                .append('g')
+
 
             //添加标签的样式（圆形大小以及颜色）
             legend.append('circle')
@@ -205,6 +206,7 @@
                 .text(function(d){
                   return d;
                 });
+              //d3.selectAll('.legend').style('border','solid')//增加边框，失败
         };
       </script>
   </head>
